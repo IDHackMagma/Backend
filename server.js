@@ -11,6 +11,7 @@ var magmaController = require('./controllers/magma');
 // Connect to the magma MongoDB
 MONGOLAB_URI="mongodb://admin:admin@ds061415.mongolab.com:61415/magma"
 //mongoose.connect('mongodb://localhost:27017/magma');
+
 mongoose.connect(MONGOLAB_URI, function (error) {
     if (error) console.error(error);
     else console.log('mongo connected');
@@ -20,9 +21,7 @@ mongoose.connect(MONGOLAB_URI, function (error) {
 var app = express();
 
 // Use the body-parser package in oour application
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
+app.use(bodyParser.json());
 
 // Create our Express router
 var router = express.Router();
