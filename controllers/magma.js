@@ -73,7 +73,7 @@ exports.deleteMagma = function(req, res){
 };
 
 // Create endpoint /api/magma/:magma_id/upvote for PUT
-exports.putMagmaUpvote = function(req, res){
+exports.getMagmaUpvote = function(req, res){
 	// use the Magma model to find a specific magma
 	Magma.findById(req.params.magma_id, function(err, magma){
 		if(err)
@@ -92,7 +92,7 @@ exports.putMagmaUpvote = function(req, res){
 };
 
 // Create endpoint /api/magma/:magma_id/downvote for PUT
-exports.putMagmaDownvote = function(req, res){
+exports.getMagmaDownvote = function(req, res){
 	// use the Magma model to find a specific magma
 	Magma.findById(req.params.magma_id, function(err, magma){
 		if(err)
