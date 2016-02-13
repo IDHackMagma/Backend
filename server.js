@@ -2,8 +2,11 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-//var Magma = require('./controller/magma');
 var magmaController = require('./controllers/magma');
+var util = require('util');
+var fs = require('fs-extra');
+var qt = require('quickthumb');
+var formidable = require('formidable');
 
 // Connect to the magma MongoDB
 mongoose.connect('mongodb://localhost:27017/magma');
@@ -16,11 +19,18 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 
-/*// Use environment defined port or 3000
-var port = process.env.PORT || 3000;
-*/
 // Create our Express router
 var router = express.Router();
+
+// Create endpoint handlers for /
+app.get('/', function (req, res) {
+    res.status(200).json({msg: 'OK' });
+  });
+
+// Create endpoint handlers for /
+app.get('/api', function (req, res) {
+    res.status(200).json({msg: 'OK' });
+  });
 
 // Create endpoint handlers for /magmas
 router.route('/magma')
@@ -33,91 +43,41 @@ router.route('/magma/:magma_id')
 	.put(magmaController.putMagma)
 	.delete(magmaController.deleteMagma);
 
-/*// Initial dummy route for testing
-// http://localhost:3000/api
-router.get('/', function(req, res) {
-	res.json({message: 'You are running dangerously low on magma!!' });
-});
-*/
+app.post('/api/upload', function(req, res){
+	var form = new formidable.IncomingForm();
+	form.parse(req, function(err, fields, files){
+		res.writeHead(200, {'context-type': 'text/plain'});
+		res.write('received upload:\n\n');
+		res.end(util.inspect({fields: fields, files: files}));
+	});
+	form.on('end', function(fields, files){
+		/* Temporary location of our uploaded file */
+    	var temp_path = this.openedFiles[0].path;
+    	/* The file name of the uploaded file */
+    	var file_name = this.openedFiles[0].name;
+    	/* Location where we want to copy the uploaded file */
+    	var new_location = 'uploads/';
 
-/*// Create a new route with prefix /magma
-var magmaRoute = router.route('/magma');
-
-// Create endpoint /api/magma for POSTS
-magmaRoute.post(function(req, res){
-	// Create a new instance of the Magma model
-	var magma = new Magma();
-
-	// set the magma properties that came from the POST data
-	magma.title = req.body.title;
-	magma.description = req.body.description;
-	magma.gps = req.body.gps;
-
-	// Save the magma and check for errors
-	magma.save(function(err){
-		if (err)
-			res.send(err);
-
-		res.json({ message: 'Magma added to the locker!', data: magma });
-	})
-})
-
-// Create endpoint /api/magma for GET
-magmaRoute.get(function(req, res){
-	// Use the Magma model to find all info
-	Magma.find(function(err, magma){
-		if(err)
-			res.send(err);
-		res.json(magma);
+    	fs.copy(temp_path, new_location + file_name, function(err) {  
+      		if (err) {
+        		console.error(err);
+      		} else {
+        		console.log("success!")
+      		}
+      	});
 	});
 });
 
-// Create a new route with the /magma/:magma_id prefix
-var magmaRoute = router.route('/magma/:magma_id');
-
-// Create endpoint /api/magma/:magma_id for GET
-magmaRoute.get(function(req, res){
-	//use the Magma model to find a specific magma
-	Magma.findById(req.params.magma_id, function(err, magma){
-		if (err)
-			res.send(err);
-		res.json(magma);
-	});
-});
-
-// Create endpoint /api/magma/:magma_id for PUT
-magmaRoute.put(function(req, res){
-	// Use the Magma model to find a specified magma
-	Magma.findById(req.params.magma_id, function(err, magma){
-		if (err)
-			res.send(err);
-		
-		// Update the existing magma quantity
-		magma.quantity = req.body.quantity;
-
-		// Save the magma and check for errors
-		magma.save(function(err){
-			if(err)
-				res.send(err);
-			res.json(magma);
-		});
-	});
-});
-
-// Create endpoint /api/magma/:magma_id for DELETE
-magmaRoute.delete(function(req, res){
-	// Use the Magma model to find a specific magma and remove it
-	Magma.findByIdAndRemove(req.params.magma_id, function(err){
-		if (err)
-			res.send(err);
-		res.json({ message: 'Magma removed from the database!' });
-	});
-});
-*/
+// Show the upload form	
+app.get('/api/upload', function (req, res){
+  res.writeHead(200, {'Content-Type': 'text/html' });
+  var form = '<form action="/upload" enctype="multipart/form-data" method="post">Add a title: <input name="title" type="text" /><br><br><input multiple="multiple" name="upload" type="file" /><br><br><input type="submit" value="Upload" /></form>';
+  res.end(form); 
+}); 
 
 // Register all our routes with /api
 app.use('/api', router);
 
 // Start the server
 app.listen(3000);
-//console.log('Insert magma on port ' + port);
+console.log('Insert magma on port ' + 3000);

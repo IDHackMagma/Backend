@@ -10,7 +10,8 @@ exports.postMagmas = function(req, res){
 	// Set the magma properties that came from the POST data
 	magma.title = req.body.title;
 	magma.description = req.body.description;
-	magma.gps = req.body.gps;
+	magma.gps_latitude = req.body.gps_latitude;
+	magma.gps_longitude = req.body.gps_longitude;
 
 	// Save the magma and check for errors
 	magma.save(function(err){
@@ -19,7 +20,6 @@ exports.postMagmas = function(req, res){
 		res.json({ message: 'Magma added to the DB!', data: magma});
 	});
 };
-
 
 
 // Create endpoint /api/magma for GET
@@ -71,3 +71,16 @@ exports.deleteMagma = function(req, res){
 		res.json({ message: 'Magma removed from the DB!' });
 	});
 };
+
+/*exports.createAvatar = function (req, res) {
+	var split = req.body.data.image.dataURL.split('base64,');
+	var type = split[0];
+	var data = split[1];
+    var img = {
+        data: data,
+        contentType: type
+    }
+	models.UserImages.create({ img: img})
+	
+	user.save(function (err, user) {});
+	*/
