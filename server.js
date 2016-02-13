@@ -56,7 +56,7 @@ app.post('/api/upload', function(req, res){
 		res.end(util.inspect({fields: fields, files: files}));
 	});
 	form.on('end', function(fields, files){
-		// Temporary location of our uploaded file 
+		//// Temporary location of our uploaded file 
     	var temp_path = this.openedFiles[0].path;
     	// The file name of the uploaded file 
     	var file_name = this.openedFiles[0].name;
