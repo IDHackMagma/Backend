@@ -84,6 +84,6 @@ app.get('/api/upload', function (req, res){
 app.use('/api', router);
 
 // Start the server
-.listen(process.env.PORT || 5000);
+app.listen(process.env.PORT || 5000);
 //app.listen(3000);
 console.log('Insert magma on port ' + 3000);
