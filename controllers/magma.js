@@ -91,6 +91,25 @@ exports.putMagmaUpvote = function(req, res){
 	});
 };
 
+// Create endpoint /api/magma/:magma_id/downvote for PUT
+exports.putMagmaDownvote = function(req, res){
+	// use the Magma model to find a specific magma
+	Magma.findById(req.params.magma_id, function(err, magma){
+		if(err)
+			res.send(err);
+
+		// Update the existing magma quantity
+		magma.upvotes -= 1;
+
+		// Save the magma and check for errors
+		magma.save(function(err){
+			if (err)
+				res.send(err);
+			res.json(magma);
+		});
+	});
+};
+
 
 /*exports.createAvatar = function (req, res) {
 	var split = req.body.data.image.dataURL.split('base64,');
