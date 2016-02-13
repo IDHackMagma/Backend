@@ -46,6 +46,9 @@ router.route('/magma/:magma_id')
 	.get(magmaController.getMagma)
 	.put(magmaController.putMagma)
 	.delete(magmaController.deleteMagma);
+
+router.route('/magma/:magma_id/upvote')
+  .put(magmaController.putMagmaUpvote)
 /*
 app.post('/api/upload', function(req, res){
 	var form = new formidable.IncomingForm();
