@@ -2,31 +2,45 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-var Magma = require('./models/magma');
+//var Magma = require('./controller/magma');
+var magmaController = require('./controllers/magma');
 
 // Connect to the magma MongoDB
 mongoose.connect('mongodb://localhost:27017/magma');
 
 // Create our Express application
 var app = express();
+
 // Use the body-parser package in oour application
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
 
-// Use environment defined port or 3000
+/*// Use environment defined port or 3000
 var port = process.env.PORT || 3000;
-
+*/
 // Create our Express router
 var router = express.Router();
 
-// Initial dummy route for testing
+// Create endpoint handlers for /magmas
+router.route('/magma')
+	.get(magmaController.getMagmas)
+	.post(magmaController.postMagmas);
+
+// Create endpoint handlers for /magma/:magma_id
+router.route('/magma/:magma_id')
+	.get(magmaController.getMagma)
+	.put(magmaController.putMagma)
+	.delete(magmaController.deleteMagma);
+
+/*// Initial dummy route for testing
 // http://localhost:3000/api
 router.get('/', function(req, res) {
 	res.json({message: 'You are running dangerously low on magma!!' });
 });
+*/
 
-// Create a new route with prefix /magma
+/*// Create a new route with prefix /magma
 var magmaRoute = router.route('/magma');
 
 // Create endpoint /api/magma for POSTS
@@ -71,7 +85,7 @@ magmaRoute.get(function(req, res){
 	});
 });
 
-/*// Create endpoint /api/magma/:magma_id for PUT
+// Create endpoint /api/magma/:magma_id for PUT
 magmaRoute.put(function(req, res){
 	// Use the Magma model to find a specified magma
 	Magma.findById(req.params.magma_id, function(err, magma){
@@ -88,7 +102,7 @@ magmaRoute.put(function(req, res){
 			res.json(magma);
 		});
 	});
-});*/
+});
 
 // Create endpoint /api/magma/:magma_id for DELETE
 magmaRoute.delete(function(req, res){
@@ -99,10 +113,11 @@ magmaRoute.delete(function(req, res){
 		res.json({ message: 'Magma removed from the database!' });
 	});
 });
-// Create a new route with the /magma
+*/
+
 // Register all our routes with /api
 app.use('/api', router);
 
 // Start the server
-app.listen(port);
-console.log('Insert magma on port ' + port);
+app.listen(3000);
+//console.log('Insert magma on port ' + port);
