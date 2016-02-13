@@ -9,7 +9,12 @@ var magmaController = require('./controllers/magma');
 //var formidable = require('formidable');
 
 // Connect to the magma MongoDB
-mongoose.connect('mongodb://localhost:27017/magma');
+MONGOLAB_URI="mongodb://admin:admin@ds061415.mongolab.com:61415/magma"
+//mongoose.connect('mongodb://localhost:27017/magma');
+mongoose.connect(MONGOLAB_URI, function (error) {
+    if (error) console.error(error);
+    else console.log('mongo connected');
+});
 
 // Create our Express application
 var app = express();
