@@ -3,10 +3,10 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var magmaController = require('./controllers/magma');
-var util = require('util');
-var fs = require('fs-extra');
-var qt = require('quickthumb');
-var formidable = require('formidable');
+//var util = require('util');
+//var fs = require('fs-extra');
+//var qt = require('quickthumb');
+//var formidable = require('formidable');
 
 // Connect to the magma MongoDB
 mongoose.connect('mongodb://localhost:27017/magma');
@@ -27,7 +27,7 @@ app.get('/', function (req, res) {
     res.status(200).json({msg: 'OK' });
   });
 
-// Create endpoint handlers for /
+// Create endpoint handlers for /api
 app.get('/api', function (req, res) {
     res.status(200).json({msg: 'OK' });
   });
@@ -42,7 +42,7 @@ router.route('/magma/:magma_id')
 	.get(magmaController.getMagma)
 	.put(magmaController.putMagma)
 	.delete(magmaController.deleteMagma);
-
+/*
 app.post('/api/upload', function(req, res){
 	var form = new formidable.IncomingForm();
 	form.parse(req, function(err, fields, files){
@@ -51,11 +51,11 @@ app.post('/api/upload', function(req, res){
 		res.end(util.inspect({fields: fields, files: files}));
 	});
 	form.on('end', function(fields, files){
-		/* Temporary location of our uploaded file */
+		// Temporary location of our uploaded file 
     	var temp_path = this.openedFiles[0].path;
-    	/* The file name of the uploaded file */
+    	// The file name of the uploaded file 
     	var file_name = this.openedFiles[0].name;
-    	/* Location where we want to copy the uploaded file */
+    	// Location where we want to copy the uploaded file 
     	var new_location = 'uploads/';
 
     	fs.copy(temp_path, new_location + file_name, function(err) {  
@@ -66,7 +66,7 @@ app.post('/api/upload', function(req, res){
       		}
       	});
 	});
-});
+});*/
 
 // Show the upload form	
 app.get('/api/upload', function (req, res){
