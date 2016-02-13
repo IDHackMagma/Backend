@@ -20,9 +20,7 @@ mongoose.connect(MONGOLAB_URI, function (error) {
 var app = express();
 
 // Use the body-parser package in oour application
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
+app.use(bodyParser.json());
 
 // Create our Express router
 var router = express.Router();
